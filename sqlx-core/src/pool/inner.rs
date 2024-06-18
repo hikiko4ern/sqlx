@@ -342,7 +342,9 @@ impl<DB: Database> PoolInner<DB> {
                 }
 
                 // an IO error while connecting is assumed to be the system starting up
-                Ok(Err(Error::Io(e))) if e.kind() == std::io::ErrorKind::ConnectionRefused => (),
+                // FIX: отключено, т.к. в текущих реалиях `connection refused` обычно означает не стартующую базу,
+                // а попытку подключения по протухшему порту
+                // Ok(Err(Error::Io(e))) if e.kind() == std::io::ErrorKind::ConnectionRefused => (),
 
                 // We got a transient database error, retry.
                 Ok(Err(Error::Database(error))) if error.is_transient_in_connect_phase() => (),
